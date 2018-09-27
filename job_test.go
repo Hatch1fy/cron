@@ -49,7 +49,6 @@ func TestJob(t *testing.T) {
 	if cnt != 4 {
 		t.Fatalf("invalid count, expected %d and received %d", 4, cnt)
 	}
-
 }
 
 func TestTimeJob(t *testing.T) {
