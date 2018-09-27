@@ -1,8 +1,3 @@
-# Cron
-Cron is a simple cronjob-like library
-
-## Usage
-```go
 package main
 
 import (
@@ -29,5 +24,3 @@ func main() {
 	// Call empty select so we can keep the service open indefinitely
 	select {}
 }
-
-```
