@@ -59,6 +59,6 @@ func (j *Job) At(target time.Time) {
 }
 
 // EveryAt will run a function continuously with the target time every day
-func (j *Job) EveryAt(duration time.Duration) {
-	go j.runEvery(duration)
+func (j *Job) EveryAt(target time.Time) {
+	go j.runEveryAt(target)
 }
