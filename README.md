@@ -14,20 +14,22 @@ import (
 
 func main() {
 	// Initialize new instance of cron
-	c := cron.New()
-
 	// After three seconds, display a success message
-	c.Set("@ 3s", func() {
-		fmt.Println("The server has been successfully started!")
-	})
+	cron.New(printSuccess).After(time.Second * 3)
 
 	// Every one minute, print the current time
-	c.Set("every 1m", func() {
-		fmt.Println("The current time is:", time.Now())
-	})
+	cron.New(printTime).Every(time.Minute)
 
 	// Call empty select so we can keep the service open indefinitely
 	select {}
+}
+
+func printSuccess() {
+	fmt.Println("The server has been successfully started!")
+}
+
+func printTime() {
+	fmt.Println("The current time is:", time.Now())
 }
 
 ```

@@ -1,80 +1,53 @@
 package cron
 
 import (
-	"fmt"
 	"testing"
 	"time"
 )
 
-func TestJob(t *testing.T) {
-	var (
-		j   *Job
-		cnt int
-		err error
-	)
+func TestJobAfter(t *testing.T) {
+	var count int
+	New(func() {
+		count++
+	}).After(time.Millisecond * 500)
 
-	q := `@ 3s`
-	ch := make(chan bool, 1)
-
-	if j, err = newJob(q, func() {
-		cnt++
-	}); err != nil {
-		t.Fatal(err)
+	time.Sleep(time.Millisecond * 100)
+	if count != 0 {
+		t.Fatalf("invalid count, expected %d and received %d", 0, count)
 	}
 
-	j.Run()
-	j.Close()
-
-	if cnt != 1 {
-		t.Fatalf("invalid count, expected %d and received %d", 1, cnt)
+	time.Sleep(time.Millisecond * 600)
+	if count != 1 {
+		t.Fatalf("invalid count, expected %d and received %d", 1, count)
 	}
 
-	q = `every 1s`
-	if j, err = newJob(q, func() {
-		if cnt++; cnt < 4 {
-			return
-		}
-
-		ch <- true
-	}); err != nil {
-		t.Fatal(err)
-	}
-	defer j.Close()
-	go j.Run()
-
-	select {
-	case <-ch:
-	}
-
-	if cnt != 4 {
-		t.Fatalf("invalid count, expected %d and received %d", 4, cnt)
+	time.Sleep(time.Millisecond * 600)
+	if count != 1 {
+		t.Fatalf("invalid count, expected %d and received %d", 1, count)
 	}
 }
 
-func TestTimeJob(t *testing.T) {
-	var (
-		j   *Job
-		cnt int
-		err error
-	)
-
-	// Get the current time
+func TestJobAt(t *testing.T) {
+	var count int
 	now := time.Now()
-	// Increment that time by one minute
-	now = now.Add(time.Minute)
-	// Set query dynamically for the current time
-	q := fmt.Sprintf(`@ %s`, now.Format(timeFmt))
+	future := now.Add(time.Second)
 
-	// Job should run a minute from now
-	if j, err = newJob(q, func() {
-		cnt++
-	}); err != nil {
-		t.Fatal(err)
+	New(func() {
+		count++
+	}).At(future)
+
+	time.Sleep(time.Millisecond * 100)
+	if count != 0 {
+		t.Fatalf("invalid count, expected %d and received %d", 0, count)
 	}
 
-	j.Run()
+	time.Sleep(time.Millisecond * 1200)
+	if count != 1 {
+		t.Fatalf("invalid count, expected %d and received %d", 1, count)
+	}
 
-	if cnt != 1 {
-		t.Fatalf("invalid count, expected %d and received %d", 1, cnt)
+	time.Sleep(time.Millisecond * 600)
+	if count != 1 {
+		t.Fatalf("invalid count, expected %d and received %d", 1, count)
 	}
 }
