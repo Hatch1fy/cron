@@ -23,8 +23,14 @@ func main() {
 }
 
 func getLunchtime() (lunch time.Time) {
+	// Get the current timestamp
 	now := time.Now()
-	lunch = time.Date(now.Year(), now.Month(), now.Day(), 12, 0, 0, 0, now.Location())
+
+	// Set eastern timezone
+	est := time.FixedZone("EST-0500", -5*60*60)
+
+	// Set time to be lunchtime (noon) for an Eastern timezone
+	lunch = time.Date(now.Year(), now.Month(), now.Day(), 12, 0, 0, 0, est)
 	return
 }
 
