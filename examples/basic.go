@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/Hatch1fy/cron"
+	"github.com/hatchify/cron"
 )
 
 func main() {
