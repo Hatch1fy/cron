@@ -1,3 +1,3 @@
-module github.com/Hatch1fy/cron
+module github.com/hatchify/cron
 
 go 1.14
